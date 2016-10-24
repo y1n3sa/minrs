@@ -1,0 +1,31 @@
+{
+  "name": "rs",
+  "version": "0.0.3",
+  "description": "javascript CSS3 range slider",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/y1n3sa/rs.git"
+  },
+  "keywords": [
+    "range",
+    "slider"
+  ],
+  "author": "y1n3sa",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/y1n3sa/rs/issues"
+  },
+  "homepage": "https://github.com/y1n3sa/rs#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-contrib-watch": "^1.0.0"
+  }
+}

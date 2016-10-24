@@ -1,0 +1,116 @@
+/*
++ mixins
+*/
+
+@mixin calc($property, $expression) {
+  #{$property}: -moz-calc(#{$expression});
+  #{$property}: -webkit-calc(#{$expression});
+  #{$property}: calc(#{$expression});
+}
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+/*
+- mixins
+*/
+
+
+/*
+* +variables
+*/
+$primary-color: #e71359;
+$secondary-color: #fefefe;
+$controller-color: rgba(0, 0, 0, 0.3);
+$controller-color-hover: rgba(0, 0, 0, 0.7);
+/*
+* -variables
+*/
+
+.range-slider-container {
+  display           : -webkit-flex;
+  display           : flex;
+  -webkit-flex-flow : row wrap;
+  flex-flow         : row wrap;
+  border            : 1px solid #efefef;
+  width             : 100%;
+  height            : 24px;
+  position          : relative;
+
+  @include border-radius(4px);
+}
+
+.range-slider-container > .left {
+  -webkit-order: 0;
+  -ms-flex-order: 0;
+  order: 0;
+  -webkit-flex: 0 1 auto;
+  -ms-flex: 0 1 auto;
+  flex: 0 1 auto;
+  -webkit-align-self: auto;
+  -ms-flex-item-align: auto;
+  align-self: auto;
+  background-color: $primary-color;
+  text-align: right;
+  color: $secondary-color;
+  line-height: 32px;
+}
+
+.range-slider-container > .left.dual {
+  background-color: $secondary-color;
+  color: $primary-color;
+}
+
+.range-slider-container > .middle {
+  -webkit-order: 0;
+  -ms-flex-order: 0;
+  order: 0;
+  -webkit-flex: 0 1 auto;
+  -ms-flex: 0 1 auto;
+  flex: 0 1 auto;
+  -webkit-align-self: auto;
+  -ms-flex-item-align: auto;
+  align-self: auto;
+  background-color: $primary-color;
+  text-align: right;
+  color: $secondary-color;
+  line-height: 32px;
+}
+
+.range-slider-container > .right {
+  -webkit-order: 0;
+  -ms-flex-order: 0;
+  order: 0;
+  -webkit-flex: 0 1 auto;
+  -ms-flex: 0 1 auto;
+  flex: 0 1 auto;
+  -webkit-align-self: auto;
+  -ms-flex-item-align: auto;
+  align-self: auto;
+  background-color: $secondary-color;
+  text-align: right;
+  color: $primary-color;
+  line-height: 32px;
+}
+
+.range-slider-container > .right.dual {
+  background-color: $secondary-color;
+  color: $primary-color;
+}
+
+.range-slider-container > .controller {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  background-color: $controller-color;
+  position: absolute;
+  top: -4px;
+  left: -16px;
+}
+
+.range-slider-container > .controller:hover {
+  background-color: $controller-color-hover;
+}
