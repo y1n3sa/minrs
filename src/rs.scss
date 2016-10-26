@@ -13,7 +13,12 @@
   -ms-border-radius: $radius;
   border-radius: $radius;
 }
-
+@mixin gradient($start, $end) {
+  background: -webkit-linear-gradient($start, $end);
+  background: -o-linear-gradient($start, $end);
+  background: -moz-linear-gradient($start, $end);
+  background: linear-gradient($start, $end);
+}
 /*
 - mixins
 */
@@ -24,8 +29,10 @@
 */
 $primary-color: #e71359;
 $secondary-color: #fefefe;
-$controller-color: rgba(0, 0, 0, 0.3);
-$controller-color-hover: rgba(0, 0, 0, 0.7);
+$controller-color: rgba(255, 255, 255, 0.8);
+$controller-border-color: rgba(157, 157, 157, 0.3);
+$controller-color-end: rgba(227, 227, 227, 0.9);
+$controller-color-hover: rgba(255, 255, 255, 1);
 /*
 * -variables
 */
@@ -44,71 +51,89 @@ $controller-color-hover: rgba(0, 0, 0, 0.7);
 }
 
 .range-slider-container > .left {
-  -webkit-order: 0;
-  -ms-flex-order: 0;
-  order: 0;
-  -webkit-flex: 0 1 auto;
-  -ms-flex: 0 1 auto;
-  flex: 0 1 auto;
-  -webkit-align-self: auto;
-  -ms-flex-item-align: auto;
-  align-self: auto;
-  background-color: $primary-color;
-  text-align: right;
-  color: $secondary-color;
-  line-height: 32px;
+  -webkit-order       : 0;
+  -ms-flex-order      : 0;
+  order               : 0;
+  -webkit-flex        : 0 1 auto;
+  -ms-flex            : 0 1 auto;
+  flex                : 0 1 auto;
+  -webkit-align-self  : auto;
+  -ms-flex-item-align : auto;
+  align-self          : auto;
+  background-color    : $primary-color;
+  text-align          : right;
+  color               : $secondary-color;
+  line-height         : 32px;
 }
 
 .range-slider-container > .left.dual {
-  background-color: $secondary-color;
-  color: $primary-color;
+  background-color    : $secondary-color;
+  color               : $primary-color;
 }
 
 .range-slider-container > .middle {
-  -webkit-order: 0;
-  -ms-flex-order: 0;
-  order: 0;
-  -webkit-flex: 0 1 auto;
-  -ms-flex: 0 1 auto;
-  flex: 0 1 auto;
-  -webkit-align-self: auto;
-  -ms-flex-item-align: auto;
-  align-self: auto;
-  background-color: $primary-color;
-  text-align: right;
-  color: $secondary-color;
-  line-height: 32px;
+  -webkit-order       : 0;
+  -ms-flex-order      : 0;
+  order               : 0;
+  -webkit-flex        : 0 1 auto;
+  -ms-flex            : 0 1 auto;
+  flex                : 0 1 auto;
+  -webkit-align-self  : auto;
+  -ms-flex-item-align : auto;
+  align-self          : auto;
+  background-color    : $primary-color;
+  text-align          : right;
+  color               : $secondary-color;
+  line-height         : 32px;
+
+  @include border-radius(8px);
 }
 
 .range-slider-container > .right {
-  -webkit-order: 0;
-  -ms-flex-order: 0;
-  order: 0;
-  -webkit-flex: 0 1 auto;
-  -ms-flex: 0 1 auto;
-  flex: 0 1 auto;
-  -webkit-align-self: auto;
-  -ms-flex-item-align: auto;
-  align-self: auto;
-  background-color: $secondary-color;
-  text-align: right;
-  color: $primary-color;
-  line-height: 32px;
+  -webkit-order       : 0;
+  -ms-flex-order      : 0;
+  order               : 0;
+  -webkit-flex        : 0 1 auto;
+  -ms-flex            : 0 1 auto;
+  flex                : 0 1 auto;
+  -webkit-align-self  : auto;
+  -ms-flex-item-align : auto;
+  align-self          : auto;
+  background-color    : $secondary-color;
+  text-align          : right;
+  color               : $primary-color;
+  line-height         : 32px;
 }
 
 .range-slider-container > .right.dual {
-  background-color: $secondary-color;
-  color: $primary-color;
+  background-color    : $secondary-color;
+  color               : $primary-color;
 }
 
 .range-slider-container > .controller {
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  background-color: $controller-color;
-  position: absolute;
-  top: -4px;
-  left: -16px;
+  border-radius       : 50%;
+  width               : 32px;
+  height              : 32px;
+  background-color    : $controller-color;
+  position            : absolute;
+  top                 : -4px;
+  left                : -16px;
+  cursor              : pointer;
+  z-index             : 2;
+  border              : 1px solid $controller-border-color;
+}
+
+.range-slider-container > .controller > .inner {
+  border-radius       : 50%;
+  width               : 16px;
+  height              : 16px;
+  position            : absolute;
+  background-color    : $controller-color;
+  left                : 8px;
+  top                 : 8px;
+  z-index             : 1;
+
+  @include gradient($controller-color, $controller-color-end);
 }
 
 .range-slider-container > .controller:hover {

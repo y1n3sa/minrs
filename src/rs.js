@@ -3,12 +3,14 @@ var RS = {};
 RS.Slider = (function () {
 
     var settings = {
-        C_LEFT          : 'left',
-        C_MIDDLE        : 'middle',
-        C_RIGHT         : 'right',
-        C_CONTAINER     : 'range-slider-container',
-        C_DUAL          : 'dual',
-        C_CONTROLLER    : 'controller'
+        C_LEFT              : 'left',
+        C_MIDDLE            : 'middle',
+        C_RIGHT             : 'right',
+        C_CONTAINER         : 'range-slider-container',
+        C_DUAL              : 'dual',
+        C_CONTROLLER        : 'controller',
+        C_CONTROLLER_INNER  : 'inner',
+        CONTROLLER_LEFT     : -16
     };
 
     var defaultOptions = {
@@ -20,7 +22,9 @@ RS.Slider = (function () {
     };
 
     var flexPatterns = [
-        { attr: 'flex', pattern: '{0} 1 auto' }
+        { attr: 'flex',         pattern: '{0} 1 auto' },
+        { attr: '-webkit-flex', pattern: '{0} 1 auto' },
+        { attr: '-ms-flex',     pattern: '{0} 1 auto' }
     ];
 
     var normalizeOptions = function (options) {
@@ -76,6 +80,9 @@ RS.Slider = (function () {
     var createController = function () {
         var controllerElement = document.createElement("div");
         controllerElement.className += settings.C_CONTROLLER;
+        var innerElement = document.createElement("div");
+        innerElement.className += settings.C_CONTROLLER_INNER;
+        controllerElement.appendChild(innerElement);
         return controllerElement;
     };
 
@@ -112,11 +119,14 @@ RS.Slider = (function () {
 
         var bindMouseDown = function (element, isMin) {
             element.onmousedown = function (e) {
-                dragging = true;
                 !e && (e = window.event);
                 var targetElement = e.target ? e.target : e.srcElement;
                 if (targetElement.className == settings.C_CONTROLLER) {
+                    dragging = true;
                     bindMouseMove(targetElement, isMin);
+                } else if(targetElement.className == settings.C_CONTROLLER_INNER) {
+                    dragging = true;
+                    bindMouseMove(targetElement.parentElement, isMin);
                 }
                 return false;
             }.bind(this);
@@ -125,14 +135,14 @@ RS.Slider = (function () {
 
         if (options.dual) {
             this.minController = createController();
-            this.minController.left = -16;
+            this.minController.left = settings.CONTROLLER_LEFT;
             this.element.appendChild(this.minController);
             bindMouseDown(this.minController, true);
         }
 
         
         this.maxController = createController();
-        this.maxController.left = -16;
+        this.maxController.left = settings.CONTROLLER_LEFT;
         this.element.appendChild(this.maxController);
         bindMouseDown(this.maxController);
 
@@ -152,9 +162,9 @@ RS.Slider = (function () {
                 if (dragging) {
                     !v && (v = window.event);
                     if (v.clientX >= this.left && v.clientX <= this.right) {
-                        element.left = v.clientX - this.left - 16;
+                        element.left = v.clientX - this.left + settings.CONTROLLER_LEFT;
                         element.style.left = element.left + 'px';
-                        dragUpdate(element.left + 16, isMin);
+                        dragUpdate(element.left - settings.CONTROLLER_LEFT, isMin);
                     }
                 }
             }.bind(this);
@@ -176,7 +186,6 @@ RS.Slider = (function () {
 
         var dragUpdate = function (value, isMin) {
             var dragUnit = (options.max - options.min) / (that.right - that.left);
-            console.log(isMin + ' ' + dragUnit + ' ' + value);
             if (isMin) {
                 that.updateMin(dragUnit * value);
             } else {
