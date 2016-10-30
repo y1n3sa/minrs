@@ -12,7 +12,9 @@ MINRS.Slider = (function () {
         C_DUAL              : 'dual',
         C_CONTROLLER        : 'controller',
         C_CONTROLLER_INNER  : 'inner',
-        CONTROLLER_LEFT     : -16
+        CONTROLLER_LEFT     : -16,
+        C_RULER             : 'range-slider-ruler',
+        RULER_LINE_COUNT    : 5
     };
 
     var defaultOptions = {
@@ -20,7 +22,8 @@ MINRS.Slider = (function () {
         end         : 400,
         start       : 0,
         min         : 0,
-        max         : 0
+        max         : 0,
+        ruler       : false
     };
 
     var flexPatterns = [
@@ -97,6 +100,20 @@ MINRS.Slider = (function () {
         return pattern;
     };
 
+    var createRuler = function (start, end) {
+        var diff = (end - start) / 4;
+        var rulerElement = document.createElement("ul");
+        for(var i=0; i < settings.RULER_LINE_COUNT; i++) {
+            var value = i == 0 ? start : (i == settings.RULER_LINE_COUNT - 1 ? end :
+                parseInt(i * diff));
+            var rulerLine = document.createElement("li");
+            rulerLine.innerHTML = value;
+            rulerElement.appendChild(rulerLine);
+        }
+        rulerElement.className += settings.C_RULER;
+        return rulerElement;
+    };
+
     return function (elementId, options) {
         var that = this;
 
@@ -147,6 +164,10 @@ MINRS.Slider = (function () {
 
         for(var i=0; i < divisions.length; i++) {
             this.element.appendChild(divisions[i]);
+        }
+
+        if (options.ruler) {
+            this.element.parentElement.insertBefore(createRuler(options.start, options.end), null);
         }
 
         var dragging = false;
