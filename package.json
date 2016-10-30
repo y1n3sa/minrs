@@ -1,10 +1,10 @@
 {
-  "name": "rs",
-  "version": "0.0.5",
+  "name": "minrs",
+  "version": "0.0.6",
   "description": "javascript CSS3 range slider",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha tests/testme.js --timeout 13000"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-sass": "^1.0.0",
     "grunt-contrib-uglify": "^2.0.0",
-    "grunt-contrib-watch": "^1.0.0"
+    "grunt-contrib-watch": "^1.0.0",
+    "mocha": "^3.1.2"
   }
 }

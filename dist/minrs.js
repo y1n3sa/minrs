@@ -1,6 +1,7 @@
-var RS = {};
+var MINRS = {};
+/// fix me /// window.resize
 
-RS.Slider = (function () {
+MINRS.Slider = (function () {
 
     var settings = {
         C_LEFT              : 'left',
@@ -15,10 +16,10 @@ RS.Slider = (function () {
 
     var defaultOptions = {
         dual        : false,
-        max         : 400,
+        end         : 400,
+        start       : 0,
         min         : 0,
-        currentMin  : 0,
-        currentMax  : 0
+        max         : 0
     };
 
     var flexPatterns = [
@@ -40,23 +41,23 @@ RS.Slider = (function () {
         }
     };
     
-    var calculateFlexes = function (min, max, currentMin, currentMax, unit, dual) {
+    var calculateFlexes = function (start, end, min, max, unit, dual) {
         var flexes = [];
         if (dual) {
-            flexes.push((currentMin - min) * unit);
+            flexes.push((min - start) * unit);
             if (dual) {
-                flexes.push((currentMax - currentMin) * unit);
+                flexes.push((max - min) * unit);
             }
-            flexes.push((max - currentMax) * unit);
+            flexes.push((end - max) * unit);
         } else {
-            flexes.push((currentMax - currentMin) * unit);
-            flexes.push((max - currentMax) * unit);
+            flexes.push((max - min) * unit);
+            flexes.push((end - max) * unit);
         }
         return flexes;
     };
 
-    var calculateUnit = function (min, max, internalMin, internalMax) {
-        return (internalMax - internalMin) / (max - min);
+    var calculateUnit = function (start, end, internalMin, internalMax) {
+        return (internalMax - internalMin) / (end - start);
     };
 
     var createDivisions = function (dual) {
@@ -100,11 +101,43 @@ RS.Slider = (function () {
 
         options = normalizeOptions(options);
 
-        var internalMin = 0, internalMax = 100;
-        var currentMin = options.currentMin;
-        var currentMax = options.currentMax;
+        this.getEndValue = function () {
+            return options.end;
+        };
 
-        var unit = calculateUnit(options.min, options.max, internalMin, internalMax);
+        this.getStartValue = function () {
+            return options.start;
+        };
+
+        var setMin = function (value) {
+            value = value || options.min;
+            value = value < options.start ? options.start : value;
+            if (!options.dual) {
+                min = options.start;
+            } else {
+                if (value <= max && value >= options.start) {
+                    min = value;
+                }
+            }
+            return min;
+        };
+
+        var setMax = function (value) {
+            value = value || options.max;
+            value = value > options.end ? options.end : value;
+            if(value <= options.end && value >= min) {
+                max = value;
+            }
+            return max;
+        };
+
+        var internalMin = 0, internalMax = 100;
+        var min = options.start;
+        var max = options.end;
+        min = setMin();
+        max = setMax();
+
+        var unit = calculateUnit(options.start, options.end, internalMin, internalMax);
 
         this.element = document.getElementById(elementId);
         this.element.className += settings.C_CONTAINER;
@@ -177,7 +210,7 @@ RS.Slider = (function () {
         };
 
         updateFlexes = function () {
-            var flexes = calculateFlexes(options.min, options.max, currentMin, currentMax,
+            var flexes = calculateFlexes(options.start, options.end, min, max,
                 unit, options.dual);
             for(var i=0; i < divisions.length; i++) {
                 updateFlex(divisions[i], flexes[i]);
@@ -185,7 +218,7 @@ RS.Slider = (function () {
         };
 
         var dragUpdate = function (value, isMin) {
-            var dragUnit = (options.max - options.min) / (that.right - that.left);
+            var dragUnit = (options.end - options.start) / (that.right - that.left);
             if (isMin) {
                 that.updateMin(dragUnit * value);
             } else {
@@ -195,16 +228,22 @@ RS.Slider = (function () {
 
         this.updateMin = function (value) {
             value = parseInt(value);
-            currentMin = value;
-            currentMax = value > currentMax ? value : currentMax;
+            min = setMin(value);
             updateFlexes();
         };
 
         this.updateMax = function (value) {
             value = parseInt(value);
-            value = currentMin > value ? currentMin : value;
-            currentMax = value;
+            max = setMax(value);
             updateFlexes();
+        };
+
+        this.getMin = function () {
+            return min;
+        };
+
+        this.getMax = function () {
+            return max;
         };
 
         this.left = this.element.offsetLeft;

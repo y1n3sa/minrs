@@ -1,0 +1,24 @@
+{
+  "name": "minrs",
+  "description": "javascript CSS3 range slider",
+  "main": "index.js",
+  "authors": [
+    "y1n3sa"
+  ],
+  "license": "Unlicense",
+  "keywords": [
+    "range",
+    "slider"
+  ],
+  "homepage": "https://github.com/y1n3sa/minrs",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "qunit": "^2.0.1"
+  }
+}

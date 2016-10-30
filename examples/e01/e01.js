@@ -1,7 +1,7 @@
 var E01 = {};
 
 window.onload = function () {
-    E01.slider      = new RS.Slider('rsSlider', {dual: true});
+    E01.slider      = new MINRS.Slider('rsSlider', {dual: true});
     E01.mininput    = document.getElementById('rsMinValue');
     E01.maxinput    = document.getElementById('rsMaxValue');
 

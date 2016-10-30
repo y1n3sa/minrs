@@ -44,7 +44,11 @@ module.exports = function (grunt) {
             },
             CSS: {
                 files: ['src/<%= pkg.name %>.scss'],
-                tasks: ['sass:dev']
+                tasks: ['sass']
+            },
+            JSMIN: {
+                files: ['src/<%= pkg.name %>.js'],
+                tasks: ['uglify']
             }
         }
     });

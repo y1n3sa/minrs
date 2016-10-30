@@ -1,0 +1,20 @@
+.topdiv {
+    width: -webkit-calc(100% - 80px);
+    width: -moz-calc(100% - 80px);
+    width: calc(100% - 80px);
+    padding: 20px 40px 20px 40px;
+    height: 120px;
+}
+.topdiv > div {
+    float: left;
+    height: 120px;
+}
+.topdiv > .slider {
+    width: 80%;
+    text-align: center;
+}
+
+.topdiv > .navigate {
+    width: 20%;
+    text-align: center;
+}
