@@ -1,6 +1,4 @@
 var MINRS = {};
-/// fix me /// window.resize
-/// fix me /// after update function invoked, relocate controllers
 
 MINRS.Slider = (function () {
 
@@ -64,21 +62,37 @@ MINRS.Slider = (function () {
         return (internalMax - internalMin) / (end - start);
     };
 
-    var createDivisions = function (dual) {
-        var divisions = [];
+    var createLeftElement = function (dual) {
         var leftElement = document.createElement("div");
         leftElement.className += settings.C_LEFT;
-        divisions.push(leftElement);
+        if (dual) {
+            leftElement.className += ' ' + settings.C_DUAL;
+        }
+        return leftElement;
+    };
+
+    var createMiddleElement = function () {
+        var middleElement = document.createElement("div");
+        middleElement.className += settings.C_MIDDLE;
+        return middleElement;
+    };
+
+    var createRightElement = function (dual) {
         var rightElement = document.createElement("div");
         rightElement.className += settings.C_RIGHT;
         if (dual) {
-            leftElement.className += ' ' + settings.C_DUAL;
-            var middleElement = document.createElement("div");
-            middleElement.className += settings.C_MIDDLE;
-            divisions.push(middleElement);
             rightElement.className += ' ' + settings.C_DUAL;
         }
-        divisions.push(rightElement);
+        return rightElement;
+    };
+
+    var createDivisions = function (dual) {
+        var divisions = [];
+        divisions.push(createLeftElement(dual));
+        if (dual) {
+            divisions.push(createMiddleElement());
+        }
+        divisions.push(createRightElement(dual));
         return divisions;
     };
 
@@ -147,7 +161,7 @@ MINRS.Slider = (function () {
                     min = value;
                 }
             }
-            return min;
+            return min || options.start;
         };
 
         var setMax = function (value) {
@@ -156,7 +170,7 @@ MINRS.Slider = (function () {
             if(value <= options.end && value >= min) {
                 max = value;
             }
-            return max;
+            return max || options.end;
         };
 
         var internalMin = 0, internalMax = 100;
@@ -237,13 +251,13 @@ MINRS.Slider = (function () {
             }.bind(this);
         }.bind(this);
 
-        updateFlex = function (element, value) {
+        var updateFlex = function (element, value) {
             flexPatterns.forEach(function (fp) {
                 element.style[fp.attr] = format(fp.pattern, value);
             });
         };
 
-        updateFlexes = function () {
+        var updateFlexes = function () {
             var flexes = calculateFlexes(options.start, options.end, min, max,
                 unit, options.dual);
             for(var i=0; i < divisions.length; i++) {
@@ -251,25 +265,54 @@ MINRS.Slider = (function () {
             }
         };
 
+        var relocateMaxController = function () {
+            that.maxController.left = ((max / (options.end - options.start)) * that.element.offsetWidth) + settings.CONTROLLER_LEFT;
+            that.maxController.style.left = that.maxController.left + 'px';
+        };
+
+        var relocateMinController = function () {
+            that.minController.left = ((min / (options.end - options.start)) * that.element.offsetWidth) + settings.CONTROLLER_LEFT;
+            that.minController.style.left = that.minController.left + 'px';
+        };
+
         var dragUpdate = function (value, isMin) {
             var dragUnit = (options.end - options.start) / (that.right - that.left);
             if (isMin) {
-                that.updateMin(dragUnit * value);
+                updateMinCheckInternal(dragUnit * value, true);
             } else {
-                that.updateMax(dragUnit * value);
+                updateMaxCheckInternal(dragUnit * value, true);
             }
         };
 
-        this.updateMin = function (value) {
+        var updateMinCheckInternal = function (value, internal) {
             value = parseInt(value);
             min = setMin(value);
             updateFlexes();
+            if (!internal && options.dual) {
+                relocateMinController();
+            }
         };
 
-        this.updateMax = function (value) {
+        var updateMaxCheckInternal = function (value, internal) {
             value = parseInt(value);
             max = setMax(value);
             updateFlexes();
+            if (!internal) {
+                relocateMaxController();
+            }
+        };
+
+        window.addEventListener("resize", function () {
+            relocateMaxController();
+            relocateMinController();
+        });
+
+        this.updateMin = function (value) {
+            updateMinCheckInternal(value);
+        };
+
+        this.updateMax = function (value) {
+            updateMaxCheckInternal(value);
         };
 
         this.getMin = function () {
