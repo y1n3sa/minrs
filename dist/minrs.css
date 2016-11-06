@@ -135,7 +135,6 @@
   margin-top: .7em;
   text-align: left;
   position: relative;
-  margin-left: -.2em;
   color: rgba(137, 137, 137, 0.9);
   font-size: 11px;
 }
@@ -152,7 +151,6 @@
   border-left: 1px solid #ccc;
   height: .7em;
   top: -.7em;
-  margin-left: .8em;
 }
 
 /*# sourceMappingURL=minrs.css.map */

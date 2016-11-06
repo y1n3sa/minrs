@@ -158,7 +158,6 @@ $ruler-font-size: 11px;
   margin-top        : .7em;
   text-align        : left;
   position          : relative;
-  margin-left       : -.2em;
   color             : $ruler-color;
   font-size         : $ruler-font-size;
 }
@@ -173,5 +172,4 @@ $ruler-font-size: 11px;
   border-left       : 1px solid #ccc;
   height            : .7em;
   top               : -.7em;
-  margin-left       : .8em;
 }

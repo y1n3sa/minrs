@@ -107,11 +107,21 @@ MINRS.Slider = (function () {
             var value = i == 0 ? start : (i == settings.RULER_LINE_COUNT - 1 ? end :
                 parseInt(i * diff));
             var rulerLine = document.createElement("li");
-            rulerLine.innerHTML = value;
+            var spanElement = document.createElement("span");
+            spanElement.innerHTML = value;
+            rulerLine.appendChild(spanElement);
             rulerElement.appendChild(rulerLine);
         }
         rulerElement.className += settings.C_RULER;
         return rulerElement;
+    };
+
+    var adjustRulerTextWidth = function (rulerElement) {
+        rulerElement.childNodes.forEach(function (li) {
+            var span = li.childNodes[0];
+            var left = span.offsetWidth / 2;
+            span.style.marginLeft = (-1 * left) + 'px';
+        });
     };
 
     return function (elementId, options) {
@@ -167,7 +177,9 @@ MINRS.Slider = (function () {
         }
 
         if (options.ruler) {
-            this.element.parentElement.insertBefore(createRuler(options.start, options.end), null);
+            var rulerElement = createRuler(options.start, options.end);
+            this.element.parentElement.insertBefore(rulerElement, null);
+            adjustRulerTextWidth(rulerElement);
         }
 
         var dragging = false;
