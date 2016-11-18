@@ -1,2 +1,4 @@
 # minrs
-minimal javascript CSS3 range slider
+Minimal javascript CSS3 range slider
+
+

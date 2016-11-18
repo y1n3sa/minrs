@@ -4,3 +4,4 @@ bower_components/*
 .idea/
 .css.map
 .js.map
+.DS_Store
