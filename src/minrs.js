@@ -3,16 +3,16 @@ var MINRS = {};
 MINRS.Slider = (function () {
 
     var settings = {
-        C_LEFT              : 'left',
-        C_MIDDLE            : 'middle',
-        C_RIGHT             : 'right',
-        C_CONTAINER         : 'range-slider-container',
-        C_DUAL              : 'dual',
-        C_CONTROLLER        : 'controller',
-        C_CONTROLLER_INNER  : 'inner',
-        CONTROLLER_LEFT     : -16,
-        C_RULER             : 'range-slider-ruler',
-        RULER_LINE_COUNT    : 5
+        LEFT        : 'left',
+        MID         : 'middle',
+        RIGHT       : 'right',
+        CONT        : 'range-slider-container',
+        DUAL        : 'dual',
+        CONTR       : 'controller',
+        CONTR_IN    : 'inner',
+        CONTR_L     : -16,
+        RULER       : 'range-slider-ruler',
+        RULER_LC    : 5
     };
 
     var defaultOptions = {
@@ -24,10 +24,12 @@ MINRS.Slider = (function () {
         ruler       : false
     };
 
+    var flexValue = '{0} 1 auto';
+
     var flexPatterns = [
-        { attr: 'flex',         pattern: '{0} 1 auto' },
-        { attr: '-webkit-flex', pattern: '{0} 1 auto' },
-        { attr: '-ms-flex',     pattern: '{0} 1 auto' }
+        { attr: 'flex',         pattern: flexValue },
+        { attr: '-webkit-flex', pattern: flexValue },
+        { attr: '-ms-flex',     pattern: flexValue }
     ];
 
     var normalizeOptions = function (options) {
@@ -64,24 +66,24 @@ MINRS.Slider = (function () {
 
     var createLeftElement = function (dual) {
         var leftElement = document.createElement("div");
-        leftElement.className += settings.C_LEFT;
+        leftElement.className += settings.LEFT;
         if (dual) {
-            leftElement.className += ' ' + settings.C_DUAL;
+            leftElement.className += ' ' + settings.DUAL;
         }
         return leftElement;
     };
 
     var createMiddleElement = function () {
         var middleElement = document.createElement("div");
-        middleElement.className += settings.C_MIDDLE;
+        middleElement.className += settings.MID;
         return middleElement;
     };
 
     var createRightElement = function (dual) {
         var rightElement = document.createElement("div");
-        rightElement.className += settings.C_RIGHT;
+        rightElement.className += settings.RIGHT;
         if (dual) {
-            rightElement.className += ' ' + settings.C_DUAL;
+            rightElement.className += ' ' + settings.DUAL;
         }
         return rightElement;
     };
@@ -98,9 +100,9 @@ MINRS.Slider = (function () {
 
     var createController = function () {
         var controllerElement = document.createElement("div");
-        controllerElement.className += settings.C_CONTROLLER;
+        controllerElement.className += settings.CONTR;
         var innerElement = document.createElement("div");
-        innerElement.className += settings.C_CONTROLLER_INNER;
+        innerElement.className += settings.CONTR_IN;
         controllerElement.appendChild(innerElement);
         return controllerElement;
     };
@@ -117,8 +119,8 @@ MINRS.Slider = (function () {
     var createRuler = function (start, end) {
         var diff = (end - start) / 4;
         var rulerElement = document.createElement("ul");
-        for(var i=0; i < settings.RULER_LINE_COUNT; i++) {
-            var value = i == 0 ? start : (i == settings.RULER_LINE_COUNT - 1 ? end :
+        for(var i=0; i < settings.RULER_LC; i++) {
+            var value = i == 0 ? start : (i == settings.RULER_LC - 1 ? end :
                 parseInt(i * diff));
             var rulerLine = document.createElement("li");
             var spanElement = document.createElement("span");
@@ -126,7 +128,7 @@ MINRS.Slider = (function () {
             rulerLine.appendChild(spanElement);
             rulerElement.appendChild(rulerLine);
         }
-        rulerElement.className += settings.C_RULER;
+        rulerElement.className += settings.RULER;
         return rulerElement;
     };
 
@@ -182,7 +184,7 @@ MINRS.Slider = (function () {
         var unit = calculateUnit(options.start, options.end, internalMin, internalMax);
 
         this.element = document.getElementById(elementId);
-        this.element.className += settings.C_CONTAINER;
+        this.element.className += settings.CONT;
 
         var divisions = createDivisions(options.dual);
 
@@ -202,10 +204,10 @@ MINRS.Slider = (function () {
             element.onmousedown = function (e) {
                 !e && (e = window.event);
                 var targetElement = e.target ? e.target : e.srcElement;
-                if (targetElement.className == settings.C_CONTROLLER) {
+                if (targetElement.className == settings.CONTR) {
                     dragging = true;
                     bindMouseMove(targetElement, isMin);
-                } else if(targetElement.className == settings.C_CONTROLLER_INNER) {
+                } else if(targetElement.className == settings.CONTR_IN) {
                     dragging = true;
                     bindMouseMove(targetElement.parentElement, isMin);
                 }
@@ -216,14 +218,14 @@ MINRS.Slider = (function () {
 
         if (options.dual) {
             this.minController = createController();
-            this.minController.left = settings.CONTROLLER_LEFT;
+            this.minController.left = settings.CONTR_L;
             this.element.appendChild(this.minController);
             bindMouseDown(this.minController, true);
         }
 
         
         this.maxController = createController();
-        this.maxController.left = settings.CONTROLLER_LEFT;
+        this.maxController.left = settings.CONTR_L;
         this.element.appendChild(this.maxController);
         bindMouseDown(this.maxController);
 
@@ -243,9 +245,9 @@ MINRS.Slider = (function () {
                 if (dragging) {
                     !v && (v = window.event);
                     if (v.clientX >= this.left && v.clientX <= this.right) {
-                        element.left = v.clientX - this.left + settings.CONTROLLER_LEFT;
+                        element.left = v.clientX - this.left + settings.CONTR_L;
                         element.style.left = element.left + 'px';
-                        dragUpdate(element.left - settings.CONTROLLER_LEFT, isMin);
+                        dragUpdate(element.left - settings.CONTR_L, isMin);
                     }
                 }
             }.bind(this);
@@ -266,12 +268,12 @@ MINRS.Slider = (function () {
         };
 
         var relocateMaxController = function () {
-            that.maxController.left = ((max / (options.end - options.start)) * that.element.offsetWidth) + settings.CONTROLLER_LEFT;
+            that.maxController.left = ((max / (options.end - options.start)) * that.element.offsetWidth) + settings.CONTR_L;
             that.maxController.style.left = that.maxController.left + 'px';
         };
 
         var relocateMinController = function () {
-            that.minController.left = ((min / (options.end - options.start)) * that.element.offsetWidth) + settings.CONTROLLER_LEFT;
+            that.minController.left = ((min / (options.end - options.start)) * that.element.offsetWidth) + settings.CONTR_L;
             that.minController.style.left = that.minController.left + 'px';
         };
 

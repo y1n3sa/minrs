@@ -1,6 +1,6 @@
 {
   "name": "minrs",
-  "version": "0.0.7",
+  "version": "1.0.0",
   "description": "javascript CSS3 range slider",
   "main": "index.js",
   "scripts": {
