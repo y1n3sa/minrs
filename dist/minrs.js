@@ -1,7 +1,9 @@
 var MINRS = {};
 
 (function () {
-    MINRS.minrsElement = document.registerElement('min-rs');
+    if (document.registerElement) {
+        MINRS.minrsElement = document.registerElement('min-rs');
+    }
 })();
 
 MINRS.Listener = (function () {
@@ -154,7 +156,11 @@ MINRS.Slider = (function () {
     };
 
     var adjustRulerTextWidth = function (rulerElement) {
-        rulerElement.childNodes.forEach(function (li) {
+        var liElements = rulerElement.childNodes;
+        if (!liElements.forEach) {
+            liElements = Array.prototype.slice.call(rulerElement.childNodes);
+        }
+        liElements.forEach(function (li) {
             var span = li.childNodes[0];
             var left = span.offsetWidth / 2;
             span.style.marginLeft = (-1 * left) + 'px';
