@@ -20,7 +20,11 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "Gruntfile.js",
+    "src",
+    "examples",
+    "*.json"
   ],
   "devDependencies": {
     "qunit": "^2.0.1"
