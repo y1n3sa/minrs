@@ -1,7 +1,12 @@
 {
   "name": "minrs",
   "description": "javascript CSS3 range slider",
-  "main": "index.js",
+  "main": [
+    "dist/minrs.js",
+    "dist/minrs.min.js",
+    "dist/minrs.css",
+    "dist/minrs.min.css"
+  ],
   "authors": [
     "y1n3sa"
   ],
