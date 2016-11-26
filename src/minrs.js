@@ -1,5 +1,20 @@
 var MINRS = {};
 
+(function () {
+    MINRS.minrsElement = document.registerElement('min-rs');
+})();
+
+MINRS.Listener = (function () {
+    window.onload = function () {
+        var elements = document.getElementsByTagName("min-rs");
+        for(var i=0; i < elements.length; i++) {
+            var element = elements.item(i);
+            var opts = JSON.parse(element.getAttribute("options"));
+            new MINRS.Slider(element, opts);
+        }
+    };
+})();
+
 MINRS.Slider = (function () {
 
     var settings = {
@@ -140,7 +155,7 @@ MINRS.Slider = (function () {
         });
     };
 
-    return function (elementId, options) {
+    return function (el, options) {
         var that = this;
 
         options = normalizeOptions(options);
@@ -183,7 +198,7 @@ MINRS.Slider = (function () {
 
         var unit = calculateUnit(options.start, options.end, internalMin, internalMax);
 
-        this.element = document.getElementById(elementId);
+        this.element = document.getElementById(el) || el;
         this.element.className += settings.CONT;
 
         var divisions = createDivisions(options.dual);
