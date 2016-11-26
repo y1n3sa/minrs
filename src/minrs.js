@@ -56,6 +56,12 @@ MINRS.Slider = (function () {
                 normalized[prop] = typeof options[prop] === 'undefined' ?
                     defaultOptions[prop] : options[prop];
             });
+            if (normalized.min < normalized.start) {
+                normalized.min = normalized.start;
+            }
+            if (normalized.max < normalized.start) {
+                normalized.max = normalized.start;
+            }
             return normalized;
         }
     };
@@ -136,7 +142,7 @@ MINRS.Slider = (function () {
         var rulerElement = document.createElement("ul");
         for(var i=0; i < settings.RULER_LC; i++) {
             var value = i == 0 ? start : (i == settings.RULER_LC - 1 ? end :
-                parseInt(i * diff));
+                parseInt(i * diff) + start);
             var rulerLine = document.createElement("li");
             var spanElement = document.createElement("span");
             spanElement.innerHTML = value;
@@ -169,30 +175,40 @@ MINRS.Slider = (function () {
         };
 
         var setMin = function (value) {
-            value = value || options.min;
-            value = value < options.start ? options.start : value;
-            if (!options.dual) {
-                min = options.start;
-            } else {
-                if (value <= max && value >= options.start) {
-                    min = value;
-                }
+            if (typeof value === 'undefined') {
+                return options.min;
             }
-            return min || options.start;
+            if (value < options.start) {
+                value = options.start;
+            }
+            if (value <= max && value >= options.start) {
+                min = value;
+            }
+            if (min > max) {
+                min = max;
+            }
+            return min;
         };
 
         var setMax = function (value) {
-            value = value || options.max;
-            value = value > options.end ? options.end : value;
+            if (typeof value === 'undefined') {
+                return options.max;
+            }
+            if (value > options.end) {
+                value = options.end;
+            }
             if(value <= options.end && value >= min) {
                 max = value;
             }
-            return max || options.end;
+            if (max > options.end) {
+                max = options.end;
+            }
+            return max;
         };
 
         var internalMin = 0, internalMax = 100;
         var min = options.start;
-        var max = options.end;
+        var max = options.start;
         min = setMin();
         max = setMax();
 
@@ -283,21 +299,25 @@ MINRS.Slider = (function () {
         };
 
         var relocateMaxController = function () {
-            that.maxController.left = ((max / (options.end - options.start)) * that.element.offsetWidth) + settings.CONTR_L;
-            that.maxController.style.left = that.maxController.left + 'px';
+            if (that.maxController) {
+                that.maxController.left = (((max - options.start) / (options.end - options.start)) * that.element.offsetWidth) + settings.CONTR_L;
+                that.maxController.style.left = that.maxController.left + 'px';
+            }
         };
 
         var relocateMinController = function () {
-            that.minController.left = ((min / (options.end - options.start)) * that.element.offsetWidth) + settings.CONTR_L;
-            that.minController.style.left = that.minController.left + 'px';
+            if (that.minController) {
+                that.minController.left = (((min - options.start) / (options.end - options.start)) * that.element.offsetWidth) + settings.CONTR_L;
+                that.minController.style.left = that.minController.left + 'px';
+            }
         };
 
         var dragUpdate = function (value, isMin) {
             var dragUnit = (options.end - options.start) / (that.right - that.left);
             if (isMin) {
-                updateMinCheckInternal(dragUnit * value, true);
+                updateMinCheckInternal((dragUnit * value) + options.start, true);
             } else {
-                updateMaxCheckInternal(dragUnit * value, true);
+                updateMaxCheckInternal((dragUnit * value) + options.start, true);
             }
         };
 
@@ -343,10 +363,10 @@ MINRS.Slider = (function () {
         this.left = this.element.offsetLeft;
         this.right = this.element.clientWidth + this.left;
 
-        updateMinCheckInternal(options.min, false);
         if (options.dual) {
             updateMaxCheckInternal(options.max, false);
         }
+        updateMinCheckInternal(options.min, false);
     };
 
 })();
