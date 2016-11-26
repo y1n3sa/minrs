@@ -4,9 +4,7 @@
   "description": "javascript CSS3 range slider",
   "main": [
     "dist/minrs.js",
-    "dist/minrs.min.js",
-    "dist/minrs.css",
-    "dist/minrs.min.css"
+    "dist/minrs.css"
   ],
   "authors": [
     "y1n3sa"
