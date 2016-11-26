@@ -342,6 +342,11 @@ MINRS.Slider = (function () {
 
         this.left = this.element.offsetLeft;
         this.right = this.element.clientWidth + this.left;
+
+        updateMinCheckInternal(options.min, false);
+        if (options.dual) {
+            updateMaxCheckInternal(options.max, false);
+        }
     };
 
 })();
