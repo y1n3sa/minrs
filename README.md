@@ -49,3 +49,6 @@ var slider  = new MINRS.Slider('rsSlider', {dual: true});
 ```
 <min-rs options='{"dual": true, "min": 30, "max": 100, "start": 10, "end": 130, "ruler": true}'></min-rs>
 ```
+
+#####Live Examples
+https://y1n3sa.github.io/minrs/
