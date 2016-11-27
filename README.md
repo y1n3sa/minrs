@@ -23,7 +23,7 @@ bower install --save minrs
 | dual          | Both minumum value and maximum value can be changed | false  |
 | end      | End value      |   400  |
 | start | Start value      |    0 |
-| min      | Minumum value      |   400  |
+| min      | Minumum value      |   0  |
 | max | Maximum value      |    0 |
 | ruler | To create a ruler below the slider      |    false |
 
