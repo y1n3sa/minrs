@@ -7,6 +7,7 @@ var MINRS = {};
 })();
 
 MINRS.Listener = (function () {
+    ///Find all min-rs html elements and create objects
     window.onload = function () {
         var elements = document.getElementsByTagName("min-rs");
         for(var i=0; i < elements.length; i++) {
@@ -49,6 +50,7 @@ MINRS.Slider = (function () {
         { attr: '-ms-flex',     pattern: flexValue }
     ];
 
+    ///Fills the undefined properties of the options provided
     var normalizeOptions = function (options) {
         if (!options) {
             return defaultOptions;
@@ -67,7 +69,8 @@ MINRS.Slider = (function () {
             return normalized;
         }
     };
-    
+
+    ///calculates flex values
     var calculateFlexes = function (start, end, min, max, unit, dual) {
         var flexes = [];
         if (dual) {
@@ -83,10 +86,12 @@ MINRS.Slider = (function () {
         return flexes;
     };
 
+    ///Proportional value
     var calculateUnit = function (start, end, internalMin, internalMax) {
         return (internalMax - internalMin) / (end - start);
     };
 
+    ///Creates the left flex
     var createLeftElement = function (dual) {
         var leftElement = document.createElement("div");
         leftElement.className += settings.LEFT;
@@ -96,12 +101,14 @@ MINRS.Slider = (function () {
         return leftElement;
     };
 
+    ///Creates middle flex for dual sliders
     var createMiddleElement = function () {
         var middleElement = document.createElement("div");
         middleElement.className += settings.MID;
         return middleElement;
     };
 
+    ///Creates the right flex
     var createRightElement = function (dual) {
         var rightElement = document.createElement("div");
         rightElement.className += settings.RIGHT;
@@ -111,6 +118,7 @@ MINRS.Slider = (function () {
         return rightElement;
     };
 
+    ///Creates the flex divisons
     var createDivisions = function (dual) {
         var divisions = [];
         divisions.push(createLeftElement(dual));
@@ -121,6 +129,7 @@ MINRS.Slider = (function () {
         return divisions;
     };
 
+    ///Controller to change min - max value
     var createController = function () {
         var controllerElement = document.createElement("div");
         controllerElement.className += settings.CONTR;
@@ -130,6 +139,7 @@ MINRS.Slider = (function () {
         return controllerElement;
     };
 
+    ///String format function
     var format = function () {
         var args = Array.prototype.slice.call(arguments);
         var pattern = args[0];
@@ -139,6 +149,7 @@ MINRS.Slider = (function () {
         return pattern;
     };
 
+    ///Calculates the ruler values and creates the ruler element with these
     var createRuler = function (start, end) {
         var diff = (end - start) / 4;
         var rulerElement = document.createElement("ul");
@@ -155,6 +166,7 @@ MINRS.Slider = (function () {
         return rulerElement;
     };
 
+    ///Tries to center the ruler value text
     var adjustRulerTextWidth = function (rulerElement) {
         var liElements = rulerElement.childNodes;
         if (!liElements.forEach) {
@@ -237,6 +249,7 @@ MINRS.Slider = (function () {
 
         var dragging = false;
 
+        ///bind the mouse down event to track dragging of the controller
         var bindMouseDown = function (element, isMin) {
             element.onmousedown = function (e) {
                 !e && (e = window.event);
@@ -327,6 +340,7 @@ MINRS.Slider = (function () {
             }
         };
 
+        ///Updates the minimum value, and if the trigger is not internal, relocates the controller
         var updateMinCheckInternal = function (value, internal) {
             value = parseInt(value);
             min = setMin(value);
@@ -336,6 +350,7 @@ MINRS.Slider = (function () {
             }
         };
 
+        ///Updates the maximum value, and if the trigger is not internal, relocates the controller
         var updateMaxCheckInternal = function (value, internal) {
             value = parseInt(value);
             max = setMax(value);
