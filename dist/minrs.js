@@ -8,14 +8,14 @@ var MINRS = {};
 
 MINRS.Listener = (function () {
     ///Find all min-rs html elements and create objects
-    window.onload = function () {
+    window.addEventListener("load", function () {
         var elements = document.getElementsByTagName("min-rs");
         for(var i=0; i < elements.length; i++) {
             var element = elements.item(i);
             var opts = JSON.parse(element.getAttribute("options"));
             new MINRS.Slider(element, opts);
         }
-    };
+    });
 })();
 
 MINRS.Slider = (function () {
