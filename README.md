@@ -12,11 +12,6 @@ bower install --save minrs
 ```
 
 ### Options
-*   dual    - (Default: false)    -
-*   end     -   End value
-*   start   -   Start value
-*   min     -   Minumum value (for dual)
-*   max     -   Maximum value
 
 | Name          | Description   | Default|
 | :-----------: |:-------------:| :----: |

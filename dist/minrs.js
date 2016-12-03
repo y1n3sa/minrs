@@ -50,6 +50,10 @@ MINRS.Slider = (function () {
         { attr: '-ms-flex',     pattern: flexValue }
     ];
 
+    var isUndefined = function (val) {
+        return typeof val === 'undefined';
+    };
+
     ///Fills the undefined properties of the options provided
     var normalizeOptions = function (options) {
         if (!options) {
@@ -57,7 +61,7 @@ MINRS.Slider = (function () {
         } else {
             var normalized = {};
             Object.getOwnPropertyNames(defaultOptions).forEach(function (prop) {
-                normalized[prop] = typeof options[prop] === 'undefined' ?
+                normalized[prop] = isUndefined(options[prop]) ?
                     defaultOptions[prop] : options[prop];
             });
             if (normalized.min < normalized.start) {
@@ -193,7 +197,7 @@ MINRS.Slider = (function () {
         };
 
         var setMin = function (value) {
-            if (typeof value === 'undefined') {
+            if (isUndefined(value)) {
                 return options.min;
             }
             if (value < options.start) {
@@ -209,7 +213,7 @@ MINRS.Slider = (function () {
         };
 
         var setMax = function (value) {
-            if (typeof value === 'undefined') {
+            if (isUndefined(value)) {
                 return options.max;
             }
             if (value > options.end) {
