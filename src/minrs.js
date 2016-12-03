@@ -64,6 +64,9 @@ MINRS.Slider = (function () {
                 normalized[prop] = isUndefined(options[prop]) ?
                     defaultOptions[prop] : options[prop];
             });
+            if (!normalized.dual) {
+                normalized.max = defaultOptions.max;
+            }
             if (normalized.min < normalized.start) {
                 normalized.min = normalized.start;
             }
@@ -365,8 +368,10 @@ MINRS.Slider = (function () {
         };
 
         window.addEventListener("resize", function () {
-            relocateMaxController();
+            that.left = that.element.offsetLeft;
+            that.right = that.element.clientWidth + that.left;
             relocateMinController();
+            relocateMaxController();
         });
 
         this.updateMin = function (value) {
